@@ -1,0 +1,15 @@
+{
+    "python.linting.pylintUseMinimalCheckers": false,
+    "python.linting.pylintPath": "${workspaceFolder}\\venv\\Scripts\\pylint",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    "files.insertFinalNewline": true,
+    "editor.rulers": [
+        72,
+        100
+    ],
+    "workbench.editor.highlightModifiedTabs": true,
+    "python.pythonPath": "venv\\Scripts\\python.exe"
+}
