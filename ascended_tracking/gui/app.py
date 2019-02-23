@@ -9,8 +9,8 @@ from time import sleep
 import wx
 from watchdog.events import FileSystemEventHandler
 
-from ascended_tracking import parser
-from ascended_tracking.watcher import Watcher
+from ascended_tracking import parser, resource, watcher
+from ascended_tracking.gui.current_session_panel import CurrentSessionPanel
 from ascended_tracking.run import Run
 
 STATS_LOCATION = 'F:/Games/Steam/steamapps/common/FPSAimTrainer/FPSAimTrainer/stats'
@@ -58,16 +58,38 @@ class StatsFileCreatedHandler(FileSystemEventHandler):
 
 
 def main():
-    for run in read_stats():
-        #print(f'{run.timestamp} {run.name} {run.weapons[0].accuracy() * 100:.2f}% {run.score:.2f} ({run.hash})')
-        print(f'"{run.timestamp}","{run.name}",{run.weapons[0].accuracy():.2f},{run.score:.2f}')
+    import ctypes
+    try:
+        ctypes.windll.shcore.SetProcessDpiAwareness(True)
+    except:
+        pass
 
-    Watcher().watch(STATS_LOCATION, StatsFileCreatedHandler())
+    #for run in read_stats():
+        #print(f'{run.timestamp} {run.name} {run.weapons[0].accuracy() * 100:.2f}% {run.score:.2f} ({run.hash})')
+        #print(f'"{run.timestamp}","{run.name}",{run.weapons[0].accuracy():.2f},{run.score:.2f}')
+
+    #watcher.watch(STATS_LOCATION, StatsFileCreatedHandler())
 
     _app = wx.App()
 
     _frame = wx.Frame(None, title='Ascended Tracking')
+    _panel = CurrentSessionPanel(_frame)
+
+    vbox = wx.BoxSizer(wx.VERTICAL)
+    vbox.Add(_panel, wx.ID_ANY, wx.EXPAND | wx.ALL)
+    _frame.SetSizer(vbox)
+
     _frame.Centre()
     _frame.Show()
+    _toolbar = _get_toolbar(_frame)
+    _frame.SetToolBar(_toolbar)
+    _toolbar.Realize()
 
     _app.MainLoop()
+
+
+def _get_toolbar(parent):
+    _toolbar = wx.ToolBar(parent, style=(wx.TB_TEXT|wx.TB_NODIVIDER))
+    _icon = wx.Bitmap(resource.path('current.png'))
+    _toolbar.AddTool(wx.ID_ANY, 'Current Session', _icon)
+    return _toolbar

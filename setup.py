@@ -11,6 +11,6 @@ setup(
     packages=['ascended_tracking'],
     zip_safe=False,
     entry_points = {
-        'console_scripts': ['ascended_tracking=ascended_tracking.gui:main'],
+        'console_scripts': ['ascended_tracking=ascended_tracking.gui.app:main'],
     }
 )
