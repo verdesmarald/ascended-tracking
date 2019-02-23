@@ -10,7 +10,7 @@ import wx
 from watchdog.events import FileSystemEventHandler
 
 from ascended_tracking import parser, resource, watcher
-from ascended_tracking.gui.current_session_panel import CurrentSessionPanel
+from ascended_tracking.gui import panels
 from ascended_tracking.run import Run
 
 STATS_LOCATION = 'F:/Games/Steam/steamapps/common/FPSAimTrainer/FPSAimTrainer/stats'
@@ -72,8 +72,8 @@ def main():
 
     _app = wx.App()
 
-    _frame = wx.Frame(None, title='Ascended Tracking')
-    _panel = CurrentSessionPanel(_frame)
+    _frame = wx.Frame(None, title='Ascended Tracking', size=(1200, 900))
+    _panel = panels.CurrentSessionPanel(_frame)
 
     vbox = wx.BoxSizer(wx.VERTICAL)
     vbox.Add(_panel, wx.ID_ANY, wx.EXPAND | wx.ALL)
