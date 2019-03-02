@@ -14,8 +14,11 @@ def is_stats_file(path):
     return STATS_FILE_REGEX.match(path) is not None
 
 
-def parse_stats(path):
-    """Parse the stats from the stats file pointed to by path."""
+def parse_filename(path):
+    """Parse name, mode and timestamp from the stats file name without
+    opening the file to get detailed information.
+    """
+
     _fname = os.path.basename(path)
     _match = STATS_FILE_REGEX.match(_fname)
 
@@ -23,6 +26,15 @@ def parse_stats(path):
         raise TypeError(f'{path} is not a valid stats file')
 
     _name, _mode, _timestr = _match.groups()
+    _timestamp = datetime.strptime(_timestr, '%Y.%m.%d-%H.%M.%S')
+
+    return (_name, _mode, _timestamp)
+
+
+def parse_stats(path):
+    """Parse the stats from the stats file pointed to by path."""
+
+    _name, _mode, _timestamp = parse_filename(path)
 
     with open(path) as stats_file:
         _content = stats_file.read()
@@ -35,7 +47,7 @@ def parse_stats(path):
     return {
         'name': _name,
         'mode': _mode,
-        'timestamp': datetime.strptime(_timestr, '%Y.%m.%d-%H.%M.%S'),
+        'timestamp': _timestamp,
         'hash': _hash,
         'kills': list(csv.DictReader(parts[0])),
         'weapons': list(csv.DictReader(parts[1])),

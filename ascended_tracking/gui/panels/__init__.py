@@ -1,1 +1,2 @@
-from .session_panel import *
+from .scenario_panels import *
+from .session_panels import *

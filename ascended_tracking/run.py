@@ -2,17 +2,24 @@ from ascended_tracking import parser
 
 
 class Run(object):
-    def __init__(self, path):
-        _raw = parser.parse_stats(path)
+    def __init__(self, path, load_details=False):
+        self.path = path
+        self.name, self.mode, self.timestamp = parser.parse_filename(path)
+        self.details_loaded = False
+
+        if load_details:
+            self.load_details()
+
+    def load_details(self):
+        if self.details_loaded:
+            return
+
+        _raw = parser.parse_stats(self.path)
         self.raw = _raw
-
-        self.name = _raw['name']
-        self.mode = _raw['mode']
-        self.timestamp = _raw['timestamp']
         self.hash = _raw['hash']
-
         self.weapons = [Weapon(weapon) for weapon in _raw['weapons']]
         self.score = float(_raw['summary']['Score'])
+        self.details_loaded = True
 
 
 class Weapon(object):

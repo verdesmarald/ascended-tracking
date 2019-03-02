@@ -46,7 +46,6 @@ class CurrentSessionPanel(SessionPanel):
         self._watcher = watcher.watch(app.STATS_LOCATION, self._on_create, False)
         self._session = {}
 
-
     def _on_create(self, event):
         if not parser.is_stats_file(event.src_path):
             return
