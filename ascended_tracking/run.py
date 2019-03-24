@@ -5,6 +5,11 @@ class Run(object):
     def __init__(self, path, load_details=False):
         self.path = path
         self.name, self.mode, self.timestamp = parser.parse_filename(path)
+
+        self.raw = None
+        self.hash = None
+        self.weapons = None
+        self.score = None
         self.details_loaded = False
 
         if load_details:
