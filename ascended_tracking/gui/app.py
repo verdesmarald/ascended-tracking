@@ -53,23 +53,15 @@ def main():
 
     _sessions = get_sessions()
     _cutoff = datetime.now() - timedelta(hours = 1)
-
-    _current_session = _previous_session = None
-    if _sessions:
-        if _sessions[-1].end > _cutoff:
-            _current_session = _sessions[-1]
-            if len(_sessions) > 1:
-                _previous_session = _sessions[-6]
-        else:
-            _previous_session = _sessions[-1]
-
-    for _session in _sessions:
-        print(f'{_session.start} {_session.end} {len(_session.scenarios)} {sum([len(_runs) for _, _runs in _session.scenarios.items()])}')
+    _current_session = _sessions[-1] if _sessions[-1].end > _cutoff else None
 
     _app = wx.App()
-
     _frame = wx.Frame(None, title='Ascended Tracking', size=(1200, 900))
-    _panel = panels.CurrentSessionPanel(_frame, session=_current_session, previous_session=_previous_session)
+    _panel = panels.CurrentSessionPanel(
+        _frame,
+        session=_current_session,
+        previous_sessions=_sessions[:-1] if _current_session else _sessions
+    )
 
     vbox = wx.BoxSizer(wx.VERTICAL)
     vbox.Add(_panel, wx.ID_ANY, wx.EXPAND | wx.ALL)
